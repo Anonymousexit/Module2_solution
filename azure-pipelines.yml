@@ -1,0 +1,30 @@
+# HTML 
+# Archive your static HTML project and save it with the build record.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: windows-latest
+
+steps:
+# Archive the HTML project
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/html-site.zip'
+    replaceExistingArchive: true
+  displayName: 'Archive HTML Project'
+
+# Publish the archive as a build artifact
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/html-site.zip'
+    ArtifactName: 'html-site'
+    publishLocation: 'Container'
+  displayName: 'Publish HTML Artifact'
+
